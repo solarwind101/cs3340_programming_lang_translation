@@ -1,8 +1,8 @@
 %{
 #include <stdio.h>
 #include <string.h>
+#include "Manohar_Bikaneri_PA2.tab.h"
 
-#define OUT(type) printf("%s: %s\n", type, yytext);
 %}
 
 %option noyywrap
@@ -19,7 +19,7 @@ INTCONST        0|[-+]?{NZDIGIT}{DIGIT}*
 
 /* String literal: single quotes, zero or more of letters/digits/space */
 SCHAR           {LOWER}|{UPPER}|{DIGIT}|[ ]
-STRING          \'({SCHAR})*\'
+STRINGL          \'({SCHAR})*\'
 
 /* Single-line comment in { ... }, no newline */
 COMMENT         \{[^}\n]*\}
@@ -28,23 +28,35 @@ COMMENT         \{[^}\n]*\}
 %%
 {COMMENT}               { /* ignore */ }
 {WS}                    { /* ignore */ }
-PROGRAM|FUNCTION|VAR|INTEGER|STRING|WHILE|DO|IF|THEN|ELSE|BEGIN|END { OUT("KEYWORD"); }
-{ID}                    { OUT("IDENTIFIER"); }
-{INTCONST}              { OUT("CONSTANT"); }
-{STRING}                { OUT("STRING_LITERAL"); }
-"<="|">="|"<>"|":="     { OUT("PUNCTUATOR"); }
-"*"                     { OUT("PUNCTUATOR"); }
-"/"                     { OUT("PUNCTUATOR"); }
-"+"                     { OUT("PUNCTUATOR"); }
-"("                     { OUT("PUNCTUATOR"); }
-")"                     { OUT("PUNCTUATOR"); }
-"<"                     { OUT("PUNCTUATOR"); }
-">"                     { OUT("PUNCTUATOR"); }
-"="                     { OUT("PUNCTUATOR"); }
-","                     { OUT("PUNCTUATOR"); }
-";"                     { OUT("PUNCTUATOR"); }
-"."                     { OUT("PUNCTUATOR"); }
-":"                     { OUT("PUNCTUATOR"); }
-"-"                     { OUT("PUNCTUATOR"); }
-.                       { OUT("UNRECOGNIZED_CHARACTER"); }
+PROGRAM 		{ return PROGRAM; }
+FUNCTION 		{ return FUNCTION; }
+VAR 			{ return VAR; }
+INTEGER			{ return INTEGER; }
+STRING 			{ return STRING; }
+WHILE 			{ return WHILE; }
+DO			{ return DO; }
+IF 			{ return IF; }
+THEN 			{ return THEN; }
+ELSE			{ return ELSE; }
+BEGIN			{ return BEGIN_;}
+END			{ return END_;} 
+{ID}                    { return identifier; }
+{INTCONST}              { return constant; }
+{STRINGL}                { return string_literal; }
+"<="|">="|"<>"          { return relop; }
+":="			{ return assignop; }
+"*"                     { return mulop; }
+"/"                     { return mulop; }
+"+"                     { return addop; }
+"("                     { return LPAREN; }
+")"                     { return RPAREN; }
+"<"                     { return relop; }
+">"                     { return relop; }
+"="                     { return relop; }
+","                     { return comma; }
+";"                     { return semicolon; }
+"."                     { return period; }
+":"                     { return colon; }
+"-"                     { return addop; }
+.                       { return -1; }
 %%

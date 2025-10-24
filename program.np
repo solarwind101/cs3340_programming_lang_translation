@@ -1,0 +1,17 @@
+{ Find factorial by recursion }
+PROGRAM recfactorial;
+VAR  n, r: INTEGER;
+FUNCTION factorial(n: INTEGER): INTEGER;
+BEGIN
+    IF n = 0 THEN
+        factorial := 1
+    ELSE
+        factorial := n * factorial(n - 1)
+END;
+BEGIN
+    n := 5;
+    r := factorial(n)  {;} {the lasat statement must not have ;. If the line follwing this would have been working, we would have kept a ; } 
+{The follwing library function and other like readln, writeln are causing the problem }
+  {  writeln(n, '! = ', r)  }
+END.
+
