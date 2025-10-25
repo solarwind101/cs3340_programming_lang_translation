@@ -14,8 +14,8 @@ DIGIT           [0-9]
 NZDIGIT         [1-9]
 ID              {LOWER}+
 ESCCHAR         \\[nt'"]
-MATSYMBL	[=+-/*]
-STRPNCTR	[,./\|;:{}[]_!@#$%^&*]
+MATSYMBL	[=+/*-]
+STRPNCTR	[][,./\\|;:{}[_!@#$%^&*]
 
 /* Integer constants: either 0 OR optional sign FOLLOWED BY nonzero-first integer */
 INTCONST        0|[-+]?{NZDIGIT}{DIGIT}*
