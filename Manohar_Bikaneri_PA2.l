@@ -13,12 +13,15 @@ UPPER           [A-Z]
 DIGIT           [0-9]
 NZDIGIT         [1-9]
 ID              {LOWER}+
+ESCCHAR         \\[nt'"]
+MATSYMBL	[=+-/*]
+STRPNCTR	[,./\|;:{}[]_!@#$%^&*]
 
 /* Integer constants: either 0 OR optional sign FOLLOWED BY nonzero-first integer */
 INTCONST        0|[-+]?{NZDIGIT}{DIGIT}*
 
 /* String literal: single quotes, zero or more of letters/digits/space */
-SCHAR           {LOWER}|{UPPER}|{DIGIT}|[ ]
+SCHAR           {LOWER}|{UPPER}|{DIGIT}|{ESCCHAR}|{MATSYMBL}|{STRPNCTR}|[ ]
 STRINGL          \'({SCHAR})*\'
 
 /* Single-line comment in { ... }, no newline */

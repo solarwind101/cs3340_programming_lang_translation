@@ -5,7 +5,6 @@ VAR z: INTEGER;
 BEGIN
 	x:= 2;
 	y:= 3;
-{1}	z:= x + y;
-{2}	write(x, '+', y, '=', z)
-{if you remove ; from end of 1 AND comment 2, it will work, see the another program why.} 
+	z:= x + y;
+	write(x, '+', y, '=', z)
 END.

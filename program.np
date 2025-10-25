@@ -10,8 +10,7 @@ BEGIN
 END;
 BEGIN
     n := 5;
-    r := factorial(n)  {;} {the lasat statement must not have ;. If the line follwing this would have been working, we would have kept a ; } 
-{The follwing library function and other like readln, writeln are causing the problem }
-  {  writeln(n, '! = ', r)  }
+    r := factorial(n) ; 
+ writeln(x, '+')  
 END.
 

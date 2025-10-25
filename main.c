@@ -7,7 +7,7 @@ int main()
 {
     if (yyparse() == 0) {  
         
-    printf("Parsed successfully.\\n");
+    printf("Parsed successfully.\\n\n");
 
  }
     return 0;

@@ -76,9 +76,9 @@ statement:
 	identifier assignop expression |
 	selection_statement |
 	iteration_statement |
-	compound_statement 
+	compound_statement |
+	function_statement /* To deal with function calls such as writeln, readln etc */
 	;
-
 selection_statement:
 	IF expression THEN statement ELSE statement  |
 	IF expression THEN statement %prec THEN
@@ -87,7 +87,10 @@ selection_statement:
 iteration_statement:
 	WHILE expression DO statement
 	;
-
+function_statement:
+	identifier LPAREN expression_list RPAREN 
+	;
+	
 expression_list:
 	expression |
 	expression_list comma expression
