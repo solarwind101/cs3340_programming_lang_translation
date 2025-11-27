@@ -1,0 +1,31 @@
+PROGRAM maximum;
+VAR max: INTEGER;
+VAR a, b, c: INTEGER;
+
+FUNCTION maxtwo(x, y: INTEGER): INTEGER;
+BEGIN
+    IF y > x THEN
+    BEGIN
+        x := y
+    END;
+    maxtwo := x
+END;
+
+FUNCTION maxthree(x, y, z: INTEGER): INTEGER;
+BEGIN
+    x := maxtwo(x, y);
+    x := maxtwo(x, z);
+    maxthree := x
+END;
+
+BEGIN
+    max := 0;
+    writeln('Enter first number');
+    readln(a);
+    writeln('Enter second number');
+    readln(b);
+    writeln('Enter third number');
+    readln(c);
+    max := maxthree(a, b, c);
+    writeln('Greatest of 3 numbers is : ', max)
+END.
