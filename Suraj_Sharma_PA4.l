@@ -1,8 +1,8 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include "Manohar_Bikaneri_PA3_translator.h"
-#include "Manohar_Bikaneri_PA3.tab.h"
+#include "Suraj_Sharma_PA4_translator.h"
+#include "Suraj_Sharma_PA4.tab.h"
 %}
 
 %option noyywrap

@@ -1,18 +1,22 @@
-all: translator
+EXECUTABLE = compiler
 
-translator: Manohar_Bikaneri_PA3.tab.c lex.yy.c Manohar_Bikaneri_PA3_translator.o
-	gcc -g -w -o translator Manohar_Bikaneri_PA3.tab.c lex.yy.c Manohar_Bikaneri_PA3_translator.o -lfl
+all: $(EXECUTABLE)
 
-Manohar_Bikaneri_PA3_translator.o: Manohar_Bikaneri_PA3_translator.c Manohar_Bikaneri_PA3_translator.h
-	gcc -g -w -c Manohar_Bikaneri_PA3_translator.c
+$(EXECUTABLE): Suraj_Sharma_PA4.tab.c lex.yy.c Suraj_Sharma_PA4_translator.o
+	gcc -g -w -o $(EXECUTABLE) Suraj_Sharma_PA4.tab.c lex.yy.c Suraj_Sharma_PA4_translator.o -lfl
 
-Manohar_Bikaneri_PA3.tab.c Manohar_Bikaneri_PA3.tab.h: Manohar_Bikaneri_PA3.y Manohar_Bikaneri_PA3_translator.h
-	bison -d -o Manohar_Bikaneri_PA3.tab.c Manohar_Bikaneri_PA3.y
+Suraj_Sharma_PA4_translator.o: Suraj_Sharma_PA4_translator.c Suraj_Sharma_PA4_translator.h
+	gcc -g -w -c Suraj_Sharma_PA4_translator.c
 
-lex.yy.c: Manohar_Bikaneri_PA3.l Manohar_Bikaneri_PA3.tab.h Manohar_Bikaneri_PA3_translator.h
-	flex -o lex.yy.c Manohar_Bikaneri_PA3.l
+Suraj_Sharma_PA4.tab.c Suraj_Sharma_PA4.tab.h: Suraj_Sharma_PA4.y Suraj_Sharma_PA4_translator.h
+	bison -d -o Suraj_Sharma_PA4.tab.c Suraj_Sharma_PA4.y
+
+lex.yy.c: Suraj_Sharma_PA4.l Suraj_Sharma_PA4.tab.h Suraj_Sharma_PA4_translator.h
+	flex -o lex.yy.c Suraj_Sharma_PA4.l
 
 clean:
-	rm -f translator Manohar_Bikaneri_PA3.tab.c Manohar_Bikaneri_PA3.tab.h lex.yy.c *.o *.output Manohar_Bikaneri_PA3_quads.out
+	rm -f $(EXECUTABLE) Suraj_Sharma_PA4.tab.c Suraj_Sharma_PA4.tab.h lex.yy.c *.o
+	#rm -f *.out
+	#rm -f *.asm
 
-.PHONY: all clean
+.PHONY: all clean test

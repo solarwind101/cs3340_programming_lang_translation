@@ -1,5 +1,5 @@
-#ifndef __MANOHAR_BIKANERI_PA3_TRANSLATOR_H
-#define __MANOHAR_BIKANERI_PA3_TRANSLATOR_H
+#ifndef __SURAJ_SHARMA_PA4_TRANSLATOR_H
+#define __SURAJ_SHARMA_PA4_TRANSLATOR_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -9,7 +9,7 @@ extern "C" {
 #include <stddef.h>
 #include <stdlib.h>
 
-#define SIZE_INT  4
+#define SIZE_INT    4
 #define SIZE_STRING 4
 
 /* Relational Operators */
@@ -90,8 +90,7 @@ extern quadarray Q;
 int emit(Opcode op, const char *arg1, const char *arg2, const char *result);
 int nextinstr(void);
 void print_symboltables(void);
-void print_quads(void);
-
+void print_quads(const char *filename);
 typedef struct intlist {
     int index;
     struct intlist *next;
@@ -134,6 +133,16 @@ typedef struct arglist {
 
 arglist *makeArgList(char *name);
 arglist *mergeArgLists(arglist *l1, arglist *l2);
+
+symbol *st_lookup_non_create(const char *name);
+
+// Memory Binding: Symbol to x86/IA-32 Address Expression
+char *st_to_x86_addr_expr(const char *name, symbolTable *st_func); 
+
+void x86_emit(FILE *f, const char *format, ...);
+void x86_generate_all(const char *out_filename);
+void x86_gen_data_section(FILE *f);
+void x86_gen_function(FILE *f, symbolTable *st_func, int start_quad, int end_quad);
 
 #ifdef __cplusplus
 }

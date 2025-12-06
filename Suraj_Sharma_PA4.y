@@ -2,12 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Manohar_Bikaneri_PA3_translator.h"
+#include "Suraj_Sharma_PA4_translator.h"
+
+#define MAX_FILENAME_LEN 256
 
 int yylex(void);
 void yyerror(const char *s);
 extern int yylineno; 
 extern char *yytext;
+extern FILE *yyin;
 %}
 
 %union {
@@ -173,13 +176,15 @@ statement_list:
         ;
 
 statement:
-        identifier assignop expression
-        {
-            stmtattr res;
-            res.nextlist = NULL;
-            if ($3.place) emit(OP_COPY, $3.place->name, NULL, $1->name);
-            $$ = res;
+    identifier assignop expression
+    {
+        stmtattr res;
+        res.nextlist = NULL;
+        if ($3.place) {
+            emit(OP_COPY, $3.place->name, NULL, $1->name);
         }
+        $$ = res;
+    }
     |   selection_statement
     |   iteration_statement
     |   compound_statement
@@ -401,16 +406,79 @@ M:
 %%
 
 void yyerror(const char *s) {
-    fprintf(stderr, "Syntax Error: %s at line %d at token '%s'\n", s, yylineno, yytext);
+    fprintf(stderr, "Syntax Error at %s at line %d at token '%s'\n", s, yylineno, yytext);
 }
 
 int main(int argc, char **argv) {
-    ST_current = createSymbolTable("global");
-    ST_global = ST_current;
+	
+	if (argc < 2) {
+		fprintf(stderr, "Usage: %s <input_file.np> [-o <output_file.asm>]\n", argv[0]);
+		return 1;
+	}
 
-    if (yyparse() == 0) {
-        print_symboltables();
-        print_quads();
-    }
-    return 0;
+	const char *input_filename = NULL;
+	const char *output_filename = NULL;
+	char default_output_buffer[MAX_FILENAME_LEN];
+
+	for (int i = 1; i < argc; i++) {
+		if (strcmp(argv[i], "-o") == 0) {
+			if (i + 1 < argc) {
+				output_filename = argv[i + 1];
+				i++;
+			} else {
+				fprintf(stderr, "Error: -o flag requires an output filename.\n");
+				return 1;
+			}
+		} else if (input_filename == NULL) {
+			input_filename = argv[i];
+		}	
+	}
+	
+	if (input_filename == NULL) {
+		fprintf(stderr, "Error: Input filename not specified.\n");
+		return 1;
+	}
+
+	if (output_filename == NULL) {
+		char *dot_pos = strrchr(input_filename, '.');
+		if (dot_pos) {
+			size_t base_len = dot_pos - input_filename;
+			snprintf(default_output_buffer, MAX_FILENAME_LEN, "%.*s.asm", (int)base_len, input_filename);
+		} else {
+			snprintf(default_output_buffer, MAX_FILENAME_LEN, "%s.asm", input_filename);
+		}
+		output_filename = default_output_buffer;
+	}
+	
+	char out_filename_buffer[MAX_FILENAME_LEN];
+	snprintf(out_filename_buffer, MAX_FILENAME_LEN, "%s", output_filename);
+	char *asm_ext_pos = strrchr(out_filename_buffer, '.');
+	if (asm_ext_pos) {
+		strcpy(asm_ext_pos, ".out");
+	} else {
+		strcat(out_filename_buffer, ".out");
+	}
+
+	yyin = fopen(input_filename, "r");
+	if (!yyin) {
+		perror("Error opening input file");
+		return 1;
+	}
+	
+	ST_current = createSymbolTable("global");
+	ST_global = ST_current;
+
+	if (yyparse() == 0) {
+		
+		print_quads(out_filename_buffer);	
+		
+		x86_generate_all(output_filename);
+		
+	} else {
+		fprintf(stderr, "Parsing failed.\n");
+		return 1;
+	}
+	
+	fclose(yyin);
+	return 0;
 }
